@@ -15,7 +15,8 @@ func AccountCreate(w http.ResponseWriter, r *http.Request) {
 	err := request.ReadJSON(w, r, &input)
 
 	if err != nil {
-		_ = request.ErrorJSON(w, err)
+		app.Application.Log.Error("Invalid input: ", err.Error())
+		_ = request.ErrorJSON(w, errors.New("invalid input"))
 		return
 	}
 
