@@ -15,7 +15,7 @@ func SetupLog() *slog.Logger {
 	Logger = slog.New(h)
 	slog.SetDefault(Logger)
 
-	programLevel.Set(slog.LevelError)
+	programLevel.Set(slog.LevelDebug)
 
 	return Logger
 }
