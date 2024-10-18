@@ -25,7 +25,7 @@ func Routes() http.Handler {
 	router.Use(middleware.Heartbeat("/ping"))
 
 	router.Post("/accounts", handle.AccountCreate)
-	router.Get("/accounts/:accountId", handle.AccountGet)
+	router.Get("/accounts/{accountId}", handle.AccountGet)
 	router.Post("/transactions", handle.TransactionCreate)
 
 	return router
