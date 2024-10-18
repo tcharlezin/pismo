@@ -7,7 +7,7 @@ import (
 
 type Account struct {
 	ID             uint      `gorm:"primarykey" json:"id"`
-	DocumentNumber string    `json:"document_number"`
+	DocumentNumber string    `gorm:"unique;not null" json:"document_number"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
 }
