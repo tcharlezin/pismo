@@ -4,8 +4,10 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"net/http"
 	"pismo/cmd/handle"
+	_ "pismo/docs"
 )
 
 func Routes() http.Handler {
@@ -25,8 +27,12 @@ func Routes() http.Handler {
 	router.Use(middleware.Heartbeat("/ping"))
 
 	router.Post("/accounts", handle.AccountCreate)
-	router.Get("/accounts/{accountId}", handle.AccountGet)
+	router.Get("/accounts/{accountID}", handle.AccountGet)
 	router.Post("/transactions", handle.TransactionCreate)
+
+	router.Get("/docs/*", httpSwagger.Handler(
+		httpSwagger.URL("/docs/doc.json"), //The url pointing to API definition
+	))
 
 	return router
 }

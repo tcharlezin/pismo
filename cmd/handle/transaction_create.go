@@ -4,12 +4,23 @@ import (
 	"errors"
 	"net/http"
 	"pismo/app"
-	"pismo/cmd/input/transaction_create"
+	"pismo/cmd/handle/transaction_create"
 	"pismo/cmd/request"
 	"pismo/data/models"
 	"pismo/src/Transaction"
 )
 
+// TransactionCreate - Create a transaction
+// @Summary Create a transaction based in the request
+// @Description Create a transaction based in the request
+// @Tags Transaction
+// @Accept  json
+// @Produce  json
+// @Param transaction_create.TransactionCreateInput body transaction_create.TransactionCreateInput true "Payload"
+// @Success 200 {object} transaction_create.TransactionCreateResponse
+// @Failure 400 "invalid input"
+// @Failure 500 "not created transaction"
+// @Router /transactions [post]
 func TransactionCreate(w http.ResponseWriter, r *http.Request) {
 
 	var input transaction_create.TransactionCreateInput
@@ -39,15 +50,5 @@ func TransactionCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_ = request.WriteJSON(w, http.StatusOK, struct {
-		TransactionID   uint    `json:"transaction_id"`
-		AccountID       uint    `json:"account_id"`
-		OperationTypeID uint    `json:"operation_type_id"`
-		Amount          float64 `json:"amount"`
-	}{
-		TransactionID:   transaction.ID,
-		AccountID:       transaction.AccountID,
-		OperationTypeID: transaction.OperationTypeID,
-		Amount:          input.Amount,
-	})
+	_ = request.WriteJSON(w, http.StatusOK, transaction_create.ResponseTo(transaction))
 }

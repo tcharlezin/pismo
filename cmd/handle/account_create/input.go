@@ -6,7 +6,7 @@ import (
 )
 
 type AccountCreateInput struct {
-	DocumentNumber string `json:"document_number"`
+	DocumentNumber string `json:"document_number" validate:"required"`
 }
 
 func Validate(input AccountCreateInput) bool {
