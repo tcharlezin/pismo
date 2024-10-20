@@ -24,3 +24,9 @@ clear:
 	@echo "Removing binary..."
 	rm ${APP_BINARY}
 	@echo "Done!"
+
+## doc: generate documentation
+doc:
+	@echo "Generating docs..."
+	@swag init -d "./" -g "cmd/main.go"
+	@echo "...Done!"

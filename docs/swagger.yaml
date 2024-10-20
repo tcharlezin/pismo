@@ -1,0 +1,141 @@
+basePath: /
+definitions:
+  account_create.AccountCreateInput:
+    properties:
+      document_number:
+        type: string
+    required:
+    - document_number
+    type: object
+  account_create.AccountCreateResponse:
+    properties:
+      account_id:
+        type: integer
+      document_number:
+        type: string
+    required:
+    - account_id
+    - document_number
+    type: object
+  account_get.AccountGetResponse:
+    properties:
+      account_id:
+        type: integer
+      document_number:
+        type: string
+    required:
+    - account_id
+    - document_number
+    type: object
+  transaction_create.TransactionCreateInput:
+    properties:
+      account_id:
+        type: integer
+      amount:
+        type: number
+      operation_type_id:
+        type: integer
+    type: object
+  transaction_create.TransactionCreateResponse:
+    properties:
+      account_id:
+        type: integer
+      amount:
+        type: number
+      operation_type_id:
+        type: integer
+      transaction_id:
+        type: integer
+    required:
+    - account_id
+    - amount
+    - operation_type_id
+    - transaction_id
+    type: object
+info:
+  contact:
+    name: Tcharles Pereira da Silva
+    url: https://tcharlez.in
+  description: Implementation of Pismo Test API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Pismo Test API
+  version: "1.0"
+paths:
+  /accounts:
+    post:
+      consumes:
+      - application/json
+      description: Create one account for the document number.
+      parameters:
+      - description: Payload
+        in: body
+        name: account_create.AccountCreateInput
+        required: true
+        schema:
+          $ref: '#/definitions/account_create.AccountCreateInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/account_create.AccountCreateResponse'
+        "400":
+          description: invalid input
+        "500":
+          description: not created account
+      summary: Create one account for the document number.
+      tags:
+      - Account
+  /accounts/{accountID}:
+    get:
+      consumes:
+      - application/json
+      description: Get one account based in the query string parameter.
+      parameters:
+      - description: Account ID
+        in: path
+        name: accountID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/account_get.AccountGetResponse'
+        "400":
+          description: account not found
+      summary: Get one account based in the query string parameter.
+      tags:
+      - Account
+  /transactions:
+    post:
+      consumes:
+      - application/json
+      description: Create a transaction based in the request
+      parameters:
+      - description: Payload
+        in: body
+        name: transaction_create.TransactionCreateInput
+        required: true
+        schema:
+          $ref: '#/definitions/transaction_create.TransactionCreateInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/transaction_create.TransactionCreateResponse'
+        "400":
+          description: invalid input
+        "500":
+          description: not created transaction
+      summary: Create a transaction based in the request
+      tags:
+      - Transaction
+swagger: "2.0"

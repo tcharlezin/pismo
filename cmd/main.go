@@ -9,6 +9,14 @@ import (
 	"pismo/cmd/api"
 )
 
+// @title           Pismo Test API
+// @version         1.0
+// @description     Implementation of Pismo Test API.
+// @contact.name   Tcharles Pereira da Silva
+// @contact.url    https://tcharlez.in
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+// @BasePath /
 func main() {
 
 	app.Application.Boot()

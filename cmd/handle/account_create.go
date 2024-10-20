@@ -4,11 +4,22 @@ import (
 	"errors"
 	"net/http"
 	"pismo/app"
-	"pismo/cmd/input/account_create"
+	"pismo/cmd/handle/account_create"
 	"pismo/cmd/request"
 	"pismo/data/models"
 )
 
+// AccountCreate - Create an account
+// @Summary Create one account for the document number.
+// @Description Create one account for the document number.
+// @Tags Account
+// @Accept  json
+// @Produce  json
+// @Param account_create.AccountCreateInput body account_create.AccountCreateInput true "Payload"
+// @Success 200 {object} account_create.AccountCreateResponse
+// @Failure 400 "invalid input"
+// @Failure 500 "not created account"
+// @Router /accounts [post]
 func AccountCreate(w http.ResponseWriter, r *http.Request) {
 
 	var input account_create.AccountCreateInput
@@ -36,5 +47,5 @@ func AccountCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_ = request.WriteJSON(w, http.StatusOK, &account)
+	_ = request.WriteJSON(w, http.StatusOK, account_create.ResponseTo(account))
 }
