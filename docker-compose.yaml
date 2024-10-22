@@ -27,15 +27,6 @@ services:
     volumes:
       - ./db-data/postgres/:/var/lib/postgresql/data/
 
-  migrate:
-    image: migrate/migrate
-    container_name: db_migrations
-    volumes:
-      - ./internal/database/migrations:/migrations
-    command: -path=/migrations -database postgres://postgres:password@postgres:5432/pismo?sslmode=disable -verbose up
-    depends_on:
-      - postgres
-
 #Volumes
 volumes:
   dbdata:
