@@ -7,7 +7,7 @@ Implementing Pismo challenge
 
 ## Setup
 
-You will need Make, migrate (`brew install golang-migrate`) and Docker to better run this environment.
+You will need Make, migrate (`brew install golang-migrate`) and Docker to better run this environment. \
 HTTP Requests covering the API are available in: `/test/development/pismo`
 
 To run the application:
