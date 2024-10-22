@@ -30,3 +30,16 @@ doc:
 	@echo "Generating docs..."
 	@swag init -d "./" -g "cmd/main.go"
 	@echo "...Done!"
+
+## migrate: run migrations
+migrate:
+	@echo "Setup migrations..."
+	@migrate -path=internal/database/migrations -database "postgresql://postgres:password@localhost:5432/pismo?sslmode=disable" -verbose up
+	@echo "...Done!"
+
+
+## rollback: rollback migrations
+rollback:
+	@echo "Setup migrations..."
+	@migrate -path=internal/database/migrations -database "postgresql://postgres:password@localhost:5432/pismo?sslmode=disable" -verbose down
+	@echo "...Done!"
