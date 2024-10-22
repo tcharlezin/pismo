@@ -2,7 +2,7 @@
 
 Implementing Pismo challenge
 
-> Go version 1.22
+> Go version 1.22 \
 > Postgres:14.2
 
 ## Setup
