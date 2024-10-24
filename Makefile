@@ -40,6 +40,12 @@ migrate:
 
 ## rollback: rollback migrations
 rollback:
-	@echo "Setup migrations..."
+	@echo "Rollback migrations..."
 	@migrate -path=internal/database/migrations -database "postgresql://postgres:password@localhost:5432/pismo?sslmode=disable" -verbose down
+	@echo "...Done!"
+
+## test-unit: test unit
+test-unit:
+	@echo "Test unit..."
+	go test ./...
 	@echo "...Done!"

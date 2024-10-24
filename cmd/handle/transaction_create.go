@@ -3,11 +3,9 @@ package handle
 import (
 	"errors"
 	"net/http"
-	"pismo/app"
-	"pismo/cmd/handle/transaction_create"
 	"pismo/cmd/request"
-	"pismo/data/models"
-	"pismo/src/Transaction"
+	"pismo/cmd/service"
+	"pismo/cmd/service/transaction_create"
 )
 
 // TransactionCreate - Create a transaction
@@ -21,34 +19,28 @@ import (
 // @Failure 400 "invalid input"
 // @Failure 500 "not created transaction"
 // @Router /transactions [post]
-func TransactionCreate(w http.ResponseWriter, r *http.Request) {
+func (app *Application) TransactionCreate(w http.ResponseWriter, r *http.Request) {
 
 	var input transaction_create.TransactionCreateInput
 	err := request.ReadJSON(w, r, &input)
 
 	if err != nil {
-		app.Application.Log.Error("Invalid input: ", err.Error())
+		app.Log.Error("Invalid input: ", "err", err.Error())
 		_ = request.ErrorJSON(w, errors.New("invalid input"))
 		return
 	}
 
-	if !transaction_create.Validate(input) {
-		_ = request.ErrorJSON(w, errors.New("invalid input"))
+	svc := service.Service{
+		Repository: app.Repository,
+		Log:        app.Log,
+	}
+
+	response, err := svc.TransactionCreate(input)
+
+	if err != nil {
+		_ = request.ErrorJSON(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	var transaction models.Transaction
-	transaction.AccountID = input.AccountID
-	transaction.OperationTypeID = input.OperationTypeID
-	transaction.Amount = Transaction.CalculateAmount(input)
-
-	result := app.Application.Repository.Create(&transaction)
-
-	if result.RowsAffected == 0 {
-		app.Application.Log.Error("Not created transaction: ", result.Error.Error())
-		_ = request.ErrorJSON(w, errors.New("not created transaction"), http.StatusInternalServerError)
-		return
-	}
-
-	_ = request.WriteJSON(w, http.StatusOK, transaction_create.ResponseTo(transaction))
+	_ = request.WriteJSON(w, http.StatusOK, &response)
 }

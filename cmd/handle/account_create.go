@@ -3,10 +3,9 @@ package handle
 import (
 	"errors"
 	"net/http"
-	"pismo/app"
-	"pismo/cmd/handle/account_create"
 	"pismo/cmd/request"
-	"pismo/data/models"
+	"pismo/cmd/service"
+	"pismo/cmd/service/account_create"
 )
 
 // AccountCreate - Create an account
@@ -20,32 +19,28 @@ import (
 // @Failure 400 "invalid input"
 // @Failure 500 "not created account"
 // @Router /accounts [post]
-func AccountCreate(w http.ResponseWriter, r *http.Request) {
+func (app *Application) AccountCreate(w http.ResponseWriter, r *http.Request) {
 
 	var input account_create.AccountCreateInput
 	err := request.ReadJSON(w, r, &input)
 
 	if err != nil {
-		app.Application.Log.Error("Invalid input: ", err.Error())
+		app.Log.Error("Invalid input: ", "err", err.Error())
 		_ = request.ErrorJSON(w, errors.New("invalid input"))
 		return
 	}
 
-	if !account_create.Validate(input) {
-		_ = request.ErrorJSON(w, errors.New("invalid input"))
-		return
+	svc := service.Service{
+		Repository: app.Repository,
+		Log:        app.Log,
 	}
 
-	var account models.Account
-	account.DocumentNumber = input.DocumentNumber
+	response, err := svc.AccountCreate(input)
 
-	result := app.Application.Repository.Create(&account)
-
-	if result.RowsAffected == 0 {
-		app.Application.Log.Error("Not created account: ", result.Error.Error())
+	if err != nil {
 		_ = request.ErrorJSON(w, errors.New("not created account"), http.StatusInternalServerError)
 		return
 	}
 
-	_ = request.WriteJSON(w, http.StatusOK, account_create.ResponseTo(account))
+	_ = request.WriteJSON(w, http.StatusOK, &response)
 }
