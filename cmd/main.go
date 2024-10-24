@@ -5,8 +5,10 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"pismo/app"
+	"pismo/app/setup"
 	"pismo/cmd/api"
+	"pismo/cmd/handle"
+	"pismo/cmd/repository"
 )
 
 // @title         Pismo Test API
@@ -18,20 +20,25 @@ import (
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 // @BasePath /
 func main() {
+	app := handle.Application{
+		Log: setup.SetupLog(),
+	}
+	repo := repository.InitDB()
+	app.Repository = &repo
 
-	app.Application.Boot()
-	defer app.Application.Shutdown()
+	app.Boot()
+	defer app.Shutdown()
 
 	webPort := os.Getenv("WEB_PORT")
 
 	// Define http server
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%s", webPort),
-		Handler: api.Routes(),
+		Handler: api.Routes(app),
 	}
 
 	// Start server
-	app.Application.Log.Info(fmt.Sprintf("Starting webserver at port %s", webPort))
+	app.Log.Info(fmt.Sprintf("Starting webserver at port %s", webPort))
 
 	err := srv.ListenAndServe()
 

@@ -10,7 +10,7 @@ import (
 	_ "pismo/docs"
 )
 
-func Routes() http.Handler {
+func Routes(app handle.Application) http.Handler {
 
 	router := chi.NewRouter()
 
@@ -26,9 +26,9 @@ func Routes() http.Handler {
 
 	router.Use(middleware.Heartbeat("/ping"))
 
-	router.Post("/accounts", handle.AccountCreate)
-	router.Get("/accounts/{accountID}", handle.AccountGet)
-	router.Post("/transactions", handle.TransactionCreate)
+	router.Post("/accounts", app.AccountCreate)
+	router.Get("/accounts/{accountID}", app.AccountGet)
+	router.Post("/transactions", app.TransactionCreate)
 
 	router.Get("/docs/*", httpSwagger.Handler(
 		httpSwagger.URL("/docs/doc.json"), //The url pointing to API definition

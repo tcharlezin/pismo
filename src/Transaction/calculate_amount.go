@@ -1,7 +1,7 @@
 package Transaction
 
 import (
-	"pismo/cmd/handle/transaction_create"
+	"pismo/cmd/service/transaction_create"
 )
 
 const PURCHASE = 1

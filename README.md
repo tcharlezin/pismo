@@ -17,4 +17,9 @@ make up
 make migrate
 ```
 
+To test the application:
+```
+make test-unit
+```
+
 Documentation is available in http://localhost:9090/docs/

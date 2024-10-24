@@ -9,14 +9,14 @@ type TransactionCreateResponse struct {
 	Amount          float64 `json:"amount" validate:"required"`
 }
 
-func ResponseTo(transaction models.Transaction) TransactionCreateResponse {
+func ResponseTo(transaction *models.Transaction) *TransactionCreateResponse {
 
 	tmpAmount := transaction.Amount
 	if tmpAmount < 0 {
 		tmpAmount = tmpAmount * (-1)
 	}
 
-	return TransactionCreateResponse{
+	return &TransactionCreateResponse{
 		TransactionID:   transaction.ID,
 		AccountID:       transaction.AccountID,
 		OperationTypeID: transaction.OperationTypeID,
